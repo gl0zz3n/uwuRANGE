@@ -1,3 +1,4 @@
+import org.dreambot.api.Client;
 import org.dreambot.api.input.Mouse;
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.container.impl.Inventory;
@@ -8,6 +9,7 @@ import org.dreambot.api.methods.interactive.NPCs;
 import org.dreambot.api.methods.interactive.Players;
 import org.dreambot.api.methods.item.GroundItems;
 import org.dreambot.api.methods.skills.Skill;
+import org.dreambot.api.methods.skills.SkillTracker;
 import org.dreambot.api.methods.skills.Skills;
 import org.dreambot.api.methods.tabs.Tab;
 import org.dreambot.api.methods.tabs.Tabs;
@@ -112,13 +114,13 @@ public class Main  extends AbstractScript { /*START*/
 
         return State.WAIT;
     } // end of getstate
-    public void Check_Run() {
+    public void checkRun() {
         if ((Walking.getRunEnergy() > Calculations.random(8, 16) ) && !Walking.isRunEnabled()){
             Walking.toggleRun();
         }
     }
     public void walkToGrandExchange() {
-        Check_Run();
+        checkRun();
         Walking.walkExact(GL0ZZ3N_AREAS.GE.getRandomTile());
         sleep(Calculations.random(1500, 4000));
     }
@@ -361,7 +363,8 @@ public class Main  extends AbstractScript { /*START*/
             } // OPEN TAB - FRIENDS
             if (randomTabToOpen == 7) {
                 if (mouseOrHotKey == 1) {
-                    Tabs.openWithMouse(Tab.INVENTORY);
+                    // todo replace this whole thang with thiv V, ~ 1 hour
+                    Tabs.openWithMouse(Tab.SKILLS.get(randomTabToOpen));
                 } else {
                     Tabs.openWithFKey(Tab.INVENTORY);
                 }
@@ -519,31 +522,33 @@ public class Main  extends AbstractScript { /*START*/
 
     }
 
-    NPC fortressGuard = NPCs.closest(npc -> npc.getName().equals("Fortress Guard")
-            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
 
+    // todo these are broken fix them. - 54 mins
     NPC chicken = NPCs.closest(npc -> npc.getName().equals("Chicken")
-            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
+            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9));
 
     NPC monk = NPCs.closest(npc -> npc.getName().equals("Monk")
-            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
+            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9));
 
     NPC lesserDemon = NPCs.closest(npc -> npc.getName().equals("Lesser Demon")
-            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
+            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9));
 
 
     @Override
     public int onLoop() {
+        if (!SkillTracker.hasStarted(Skill.RANGED) && Client.isLoggedIn()) {
+            SkillTracker.start(Skill.RANGED);
+            // you now use
+//            SkillTracker.getGainedExperience(Skill.RANGED)
+//            SkillTracker.getGainedExperiencePerHour(Skill.RANGED)
+            // to get your gained xp
+        }
 
+        // COMBAT OPTIONS
         antiBanTask = Calculations.random(1, 50);
         randomTabToOpen = Calculations.random(1, 13);
         mouseOrHotKey = Calculations.random(1, 2);
         killFortressGuards = 1;
-
-
-        /////COMBAT OPTIONS
-
-
         switch (getState()) {
 
             //Shortbow - Max Distance = 5 / 7 if using Longrange with Defence
@@ -552,8 +557,8 @@ public class Main  extends AbstractScript { /*START*/
 
 
                 if (!getLocalPlayer().isInCombat()) {
-
-
+                    NPC fortressGuard = NPCs.closest(npc -> npc.getName().equals("Fortress Guard")
+                            && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9));
                     if (Equipment.contains(x -> x.getName().contains("arrow"))) {
                         if (GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.contains(getLocalPlayer())) {
                             if ((GL0ZZ3N_AREAS.BLACK_KNIGHT_FORTRESS_ENTRANCE.contains(fortressGuard))) {
@@ -565,7 +570,7 @@ public class Main  extends AbstractScript { /*START*/
                                 antiBan();
                             }
                         } else {
-                            Check_Run();
+                            checkRun();
                             log("uwu! Travelling To Ice Mountain!");
                             Walking.walkExact(GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.getRandomTile());
                             sleep(Calculations.random(1500, 2800));
@@ -576,20 +581,19 @@ public class Main  extends AbstractScript { /*START*/
                         log("uwu! Checking For Arrows!");
                         checkInventoryForArrows();
                     }
-
+                    return 600;
                 }
 
                 if (getLocalPlayer().isInCombat()) {
                     if (Dialogues.canContinue()) {
                         log("UWU! - We Gained A Level");
                         Dialogues.continueDialogue();
-                        return (Calculations.random(10, 50));
+                        return Calculations.random(10, 50);
                     }
                     if (!GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.contains(getLocalPlayer())) {
-                        Check_Run();
+                        checkRun();
                         Walking.walkExact(GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.getRandomTile());
-                        sleep(Calculations.random(1500, 2800));
-                        return (Calculations.random(10, 50));
+                        return Calculations.random(1500, 2800);
                     }
 
                 }
@@ -599,8 +603,6 @@ public class Main  extends AbstractScript { /*START*/
             case KILL_CHICKEN_ACTIVITY:
 
                 if (!getLocalPlayer().isInCombat()) {
-
-
                     if (Equipment.contains(x -> x.getName().contains("arrow"))) {
                         if (GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.contains(getLocalPlayer())) {
                             if ((GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.contains(chicken))) {
@@ -612,7 +614,7 @@ public class Main  extends AbstractScript { /*START*/
                                 antiBan();
                             }
                         } else {
-                            Check_Run();
+                            checkRun();
                             log("uwu! Travelling To Falador Farm Chickens!");
                             Walking.walkExact(GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.getRandomTile());
                             sleep(Calculations.random(1500, 2800));
@@ -623,7 +625,6 @@ public class Main  extends AbstractScript { /*START*/
                         log("uwu! Checking For Arrows!");
                         checkInventoryForArrows();
                     }
-
                 }
 
                 if (getLocalPlayer().isInCombat()) {
@@ -633,7 +634,7 @@ public class Main  extends AbstractScript { /*START*/
                         return (Calculations.random(10, 50));
                     }
                     if (!GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.contains(getLocalPlayer())) {
-                        Check_Run();
+                        checkRun();
                         Walking.walkExact(GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.getRandomTile());
                         sleep(Calculations.random(1500, 2800));
                         return (Calculations.random(10, 50));
@@ -657,7 +658,7 @@ public class Main  extends AbstractScript { /*START*/
                                 antiBan();
                             }
                         } else {
-                            Check_Run();
+                            checkRun();
                             log("uwu! Travelling To Monastery!");
                             Walking.walkExact(GL0ZZ3N_AREAS.MONASTERY.getRandomTile());
                             sleep(Calculations.random(1500, 2800));
@@ -678,7 +679,7 @@ public class Main  extends AbstractScript { /*START*/
                         return (Calculations.random(10, 50));
                     }
                     if (!GL0ZZ3N_AREAS.MONASTERY.contains(getLocalPlayer())) {
-                        Check_Run();
+                        checkRun();
                         Walking.walkExact(GL0ZZ3N_AREAS.MONASTERY.getRandomTile());
                         sleep(Calculations.random(1500, 2800));
                         return (Calculations.random(10, 50));
@@ -693,8 +694,8 @@ public class Main  extends AbstractScript { /*START*/
 
                     if (Equipment.contains(x -> x.getName().contains("arrow"))) {
                         if (GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.contains(getLocalPlayer())) {
-                            if ((GL0ZZ3N_AREAS.BLACK_KNIGHT_FORTRESS_ENTRANCE.contains(fortressGuard))) {
-                                fortressGuard.interact("Attack");
+                            if ((GL0ZZ3N_AREAS.BLACK_KNIGHT_FORTRESS_ENTRANCE.contains(lesserDemon))) {
+                                lesserDemon.interact("Attack");
                                 rangeXpHr = (int) (rangeXpGained / ((System.currentTimeMillis() - timeBegan) / 3600000.0D));
                                 log("uwu! Attacking Fortress Guard!");
                                 return (Calculations.random(750, 900));
@@ -702,7 +703,7 @@ public class Main  extends AbstractScript { /*START*/
                                 antiBan();
                             }
                         } else {
-                            Check_Run();
+                            checkRun();
                             log("uwu! Travelling To Ice Mountain!");
                             Walking.walkExact(GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.getRandomTile());
                             sleep(Calculations.random(1500, 2800));
@@ -723,7 +724,7 @@ public class Main  extends AbstractScript { /*START*/
                         return (Calculations.random(10, 50));
                     }
                     if (!GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.contains(getLocalPlayer())) {
-                        Check_Run();
+                        checkRun();
                         Walking.walkExact(GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.getRandomTile());
                         sleep(Calculations.random(1500, 2800));
                         return (Calculations.random(10, 50));
