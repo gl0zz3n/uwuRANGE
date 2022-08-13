@@ -97,7 +97,7 @@ public class Main  extends AbstractScript { /*START*/
     } // end of State
     private State getState() {
 
-
+        // ??? see ~ 30 minutes
         if(Skills.getRealLevel(Skill.RANGED) < 25){
             return State.KILL_FORTRESS_GUARD_ACTIVITY;
         }
