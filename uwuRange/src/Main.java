@@ -40,6 +40,14 @@ public class Main  extends AbstractScript { /*START*/
     private static final Color RED = new Color(254, 0, 0);
     private static final Color PINK = new Color(254, 0, 241);
 
+    // BOW IDS
+    public static final int SHORTBOW = 841;
+    public static final int OAK_SHORTBOW = 843;
+    public static final int WILLOW_SHORTBOW = 849;
+    public static final int MAPLE_SHORTBOW = 853;
+    public static final int YEW_SHORTBOW = 857;
+    public static final int MAGIC_SHORTBOW = 861;
+
 
     int killFortressGuards = 1;
     int attackDelay = 650;
@@ -146,46 +154,23 @@ public class Main  extends AbstractScript { /*START*/
             Inventory.get(item -> item.getName().contains("boots")).interact("Wear");
             sleep(1200,6000);
         }
-        if((Skills.getRealLevel(Skill.RANGED) < 5) &&
-                (!Equipment.contains("Shortbow") &&
-                (Inventory.contains("Shortbow")))) {
-            Inventory.get("Shortbow").interact("Wield");
 
+        /*
+        magic shortbow <= 50
+        yew shortbow <= 40
+        maple <= 30
+        willow <= 20
+        oak <= 5
+        shortbow
+         */
+        int appropriateBowID = getAppropriateBow();
+        if (!Equipment.contains(appropriateBowID) && Inventory.contains(appropriateBowID)) {
+            Inventory.interact(appropriateBowID, "Wield");
+            return;
         }
-        if((Skills.getRealLevel(Skill.RANGED) > 4) &&
-                (Skills.getRealLevel(Skill.RANGED) < 20) &&
-                (!Equipment.contains("Oak shortbow") &&
-                        (Inventory.contains("Oak shortbow")))) {
-            Inventory.get("Oak shortbow").interact("Wield");
 
-        }
-        if((Skills.getRealLevel(Skill.RANGED) > 19) &&
-                (Skills.getRealLevel(Skill.RANGED) < 30) &&
-                (!Equipment.contains("Willow shortbow") &&
-                        (Inventory.contains("Willow shortbow")))) {
-            Inventory.get("Willow shortbow").interact("Wield");
+        // bows end here
 
-        }
-        if((Skills.getRealLevel(Skill.RANGED) > 29) &&
-                (Skills.getRealLevel(Skill.RANGED) < 40) &&
-                (!Equipment.contains("Maple shortbow") &&
-                        (Inventory.contains("Maple shortbow")))) {
-            Inventory.get("Maple shortbow").interact("Wield");
-
-        }
-        if((Skills.getRealLevel(Skill.RANGED) > 39) &&
-                (Skills.getRealLevel(Skill.RANGED) < 50) &&
-                (!Equipment.contains("Yew shortbow") &&
-                        (Inventory.contains("Yew shortbow")))) {
-            Inventory.get("Yew shortbow").interact("Wield");
-
-        }
-        if((Skills.getRealLevel(Skill.RANGED) > 49) &&
-                (!Equipment.contains("Magic shortbow") &&
-                        (Inventory.contains("Magic shortbow")))) {
-            Inventory.get("Magic shortbow").interact("Wield");
-
-        }
         if((Skills.getRealLevel(Skill.RANGED) < 5) &&
                 (Skills.getRealLevel(Skill.DEFENCE) < 10) &&
                 (!Equipment.contains("Leather body") &&
@@ -257,10 +242,10 @@ public class Main  extends AbstractScript { /*START*/
             Inventory.get("Green d'hide chaps").interact("Wear");
 
         }
-        if((Skills.getRealLevel(Skill.RANGED) > 49) &&
-                (Skills.getRealLevel(Skill.RANGED) < 60) &&
-                (!Equipment.contains("Blue d'hide chaps") &&
-                        (Inventory.contains("Blue d'hide chaps")))) {
+        if((Skills.getRealLevel(Skill.RANGED) > 49)
+                && Skills.getRealLevel(Skill.RANGED) < 60
+                && !Equipment.contains("Blue d'hide chaps")
+                && Inventory.contains("Blue d'hide chaps")) {
             Inventory.get("Blue d'hide chaps").interact("Wear");
 
         }
@@ -799,6 +784,28 @@ public class Main  extends AbstractScript { /*START*/
             res = (days + ":" + hours + ":" + minutes + ":" + seconds);
         }
         return res;
+    }
+
+    /**
+     *
+     * @return the appropriate bow for your level
+     */
+    private int getAppropriateBow() {
+        /*
+        magic shortbow <= 50
+        yew shortbow <= 40
+        maple <= 30
+        willow <= 20
+        oak <= 5
+        shortbow
+         */
+        int lvl = Skills.getRealLevel(Skill.RANGED);
+        if (lvl >= 50) return MAGIC_SHORTBOW;
+        if (lvl >= 40) return YEW_SHORTBOW;
+        if (lvl >= 30) return MAPLE_SHORTBOW;
+        if (lvl >= 20) return WILLOW_SHORTBOW;
+        if (lvl >= 5) return OAK_SHORTBOW;
+        return SHORTBOW;
     }
 }/*END*/
 
