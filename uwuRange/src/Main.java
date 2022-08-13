@@ -1,29 +1,29 @@
 import org.dreambot.api.input.Mouse;
+import org.dreambot.api.methods.Calculations;
+import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.methods.container.impl.equipment.Equipment;
+import org.dreambot.api.methods.dialogues.Dialogues;
 import org.dreambot.api.methods.interactive.GameObjects;
+import org.dreambot.api.methods.interactive.NPCs;
+import org.dreambot.api.methods.interactive.Players;
 import org.dreambot.api.methods.item.GroundItems;
 import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.methods.skills.Skills;
 import org.dreambot.api.methods.tabs.Tab;
 import org.dreambot.api.methods.tabs.Tabs;
+import org.dreambot.api.methods.walking.impl.Walking;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
-import org.dreambot.api.methods.Calculations;
-import org.dreambot.api.methods.container.impl.Inventory;
-import org.dreambot.api.methods.dialogues.Dialogues;
-import org.dreambot.api.methods.interactive.NPCs;
-import org.dreambot.api.methods.walking.impl.Walking;
 import org.dreambot.api.wrappers.interactive.Entity;
 import org.dreambot.api.wrappers.interactive.NPC;
 
-import static org.dreambot.api.methods.walking.impl.Walking.walk;
-import java.awt.*;
-import java.text.DecimalFormat;
-import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 
 
@@ -71,7 +71,7 @@ public class Main  extends AbstractScript { /*START*/
         startingRangeLVL = Skills.getRealLevel(Skill.RANGED);
         //Starting_Defense_XP = Skills.getExperience(Skill.DEFENCE);
 
-        CheckInventoryForArrows();
+        checkInventoryForArrows();
 
 
     } // end of on start
@@ -105,28 +105,32 @@ public class Main  extends AbstractScript { /*START*/
             Walking.toggleRun();
         }
     }
-    public void Walk_To_Grand_Exchange() {
+    public void walkToGrandExchange() {
         Check_Run();
         Walking.walkExact(GL0ZZ3N_AREAS.GE.getRandomTile());
         sleep(Calculations.random(1500, 4000));
     }
-    public void CheckInventoryForArrows() {
-        log("CheckInventoryForArrows()");
 
-        if ( (!Equipment.contains(x -> x.getName().contains("arrow"))) && (Inventory.contains(x -> x.getName().contains("arrow")))  ) {
+    public void checkInventoryForArrows() {
+        log("checkInventoryForArrows()");
+
+        if (!Equipment.contains(x -> x.getName().contains("arrow"))
+                && Inventory.contains(x -> x.getName().contains("arrow"))) {
             log("uwu! No Arrows Equipped, But We have Arrows In Inventory!");
             Inventory.get(item -> item.getName().contains("arrow")).interact("Wield");
             sleep(1200,6000);
         }
 
-        if (!GL0ZZ3N_AREAS.GE.contains(getLocalPlayer()) && (!Equipment.contains(x -> x.getName().contains("arrow"))) && (!Inventory.contains(x -> x.getName().contains("arrow"))) ) {
-            Walk_To_Grand_Exchange();
-        }
-        if (GL0ZZ3N_AREAS.GE.contains(getLocalPlayer()) && (!Equipment.contains(x -> x.getName().contains("arrow"))) && (!Inventory.contains(x -> x.getName().contains("arrow"))) ){
+        if (!Equipment.contains(x -> x.getName().contains("arrow"))
+                && !Inventory.contains(x -> x.getName().contains("arrow"))) {
+            if (!GL0ZZ3N_AREAS.GE.contains(Players.localPlayer())) {
+                walkToGrandExchange();
+                return;
+            }
+            // todo do ge?
             log("uwu! We have no arrows - Stopping Script!");
             stop();
         }
-
     }
 
     public void CheckEquipment() {
@@ -583,7 +587,7 @@ public class Main  extends AbstractScript { /*START*/
                         }
                     } else {
                         log("uwu! Checking For Arrows!");
-                        CheckInventoryForArrows();
+                        checkInventoryForArrows();
                     }
 
                 }
@@ -630,7 +634,7 @@ public class Main  extends AbstractScript { /*START*/
                         }
                     } else {
                         log("uwu! Checking For Arrows!");
-                        CheckInventoryForArrows();
+                        checkInventoryForArrows();
                     }
 
                 }
@@ -675,7 +679,7 @@ public class Main  extends AbstractScript { /*START*/
                         }
                     } else {
                         log("uwu! Checking For Arrows!");
-                        CheckInventoryForArrows();
+                        checkInventoryForArrows();
                     }
 
                 }
@@ -720,7 +724,7 @@ public class Main  extends AbstractScript { /*START*/
                         }
                     } else {
                         log("uwu! Checking For Arrows!");
-                        CheckInventoryForArrows();
+                        checkInventoryForArrows();
                     }
 
                 }
