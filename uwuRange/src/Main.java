@@ -36,9 +36,9 @@ import java.net.URL;
 )
 
 public class Main  extends AbstractScript { /*START*/
-    private static final Color orange = new Color(254, 127, 0);
-    private static final Color red = new Color(254, 0, 0);
-    private static final Color pink = new Color(254, 0, 241);
+    private static final Color ORANGE = new Color(254, 127, 0);
+    private static final Color RED = new Color(254, 0, 0);
+    private static final Color PINK = new Color(254, 0, 241);
 
 
     int killFortressGuards = 1;
@@ -764,7 +764,7 @@ public class Main  extends AbstractScript { /*START*/
 
 
         DecimalFormat df = new DecimalFormat("###,###,###");
-        g.setColor(pink);
+        g.setColor(PINK);
         g.setFont(new Font( "Copperplate Gothic",Font.BOLD, 18));
 
         g.drawString(ft(timeRan), LEFT_ALLIGN, 415);
