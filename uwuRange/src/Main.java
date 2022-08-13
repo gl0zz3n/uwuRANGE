@@ -89,13 +89,17 @@ public class Main  extends AbstractScript { /*START*/
     } //end of on exit
 
     private enum State {
-        KillFortressGuardActivity,KillChickenActivity,KillMonkActivity,KillLesserDemonActivity, WAIT
+        KILL_FORTRESS_GUARD_ACTIVITY,
+        KILL_CHICKEN_ACTIVITY,
+        KILL_MONK_ACTIVITY,
+        KILL_LESSER_DEMON_ACTIVITY,
+        WAIT
     } // end of State
     private State getState() {
 
 
         if(Skills.getRealLevel(Skill.RANGED) < 25){
-            return State.KillFortressGuardActivity;
+            return State.KILL_FORTRESS_GUARD_ACTIVITY;
         }
 
         if(Skills.getRealLevel(Skill.RANGED) < 40 && Skills.getRealLevel(Skill.RANGED) > 24 ){
@@ -190,8 +194,10 @@ public class Main  extends AbstractScript { /*START*/
                         (Inventory.contains("Studded body")))) {
             Inventory.get("Studded body").interact("Wear");
         }
-        if((Skills.getRealLevel(Skill.RANGED) < 39) &&
-                (!Equipment.contains("Leather vambraces") &&
+        // bodys end
+        // vambraces start
+        if((Skills.getRealLevel(Skill.RANGED) < 39)
+                && (!Equipment.contains("Leather vambraces") &&
                         (Inventory.contains("Leather vambraces")))) {
             Inventory.get("Leather vambraces").interact("Wear");
         }
@@ -222,6 +228,8 @@ public class Main  extends AbstractScript { /*START*/
             Inventory.get("Black d'hide vambraces").interact("Wear");
 
         }
+        // vambs end
+        // chaps start
         if((Skills.getRealLevel(Skill.RANGED) < 20) &&
                 (!Equipment.contains("Leather chaps") &&
                         (Inventory.contains("Leather chaps")))) {
@@ -262,24 +270,18 @@ public class Main  extends AbstractScript { /*START*/
             Inventory.get("Black d'hide chaps").interact("Wear");
 
         }
-
-
-
-
-
-
     }
 
-    public int AntiBanTask;
-    public int RandomTabToOpen;
-    public int RandomSkillToCheck;
-    public int MouseOrHotKey;
-    public int ShouldClickSkill;
+    public int antiBanTask;
+    public int randomTabToOpen;
+    public int randomSkillToCheck;
+    public int mouseOrHotKey;
+    public int shouldClickSkill;
 
-    public void AntiBan() {
+    public void antiBan() {
         log("Anti-Ban.");
 
-        if (AntiBanTask == 1) {
+        if (antiBanTask == 1) {
             log("Moving Mouse Outside Of Window.");
             if(Mouse.isMouseInScreen()) {
                 Mouse.moveMouseOutsideScreen();
@@ -287,7 +289,7 @@ public class Main  extends AbstractScript { /*START*/
             }
         } // Move Mouse Outside Of Window
 
-        if (AntiBanTask == 2) {
+        if (antiBanTask == 2) {
             log("Examine Closest Entity.");
             Entity RandomEntity = GameObjects.closest(n -> n != null && !n.getName().equals("null"));
             if (RandomEntity != null) {
@@ -295,7 +297,7 @@ public class Main  extends AbstractScript { /*START*/
             }
         } // Examine Closest Entity
 
-        if (AntiBanTask == 3) {
+        if (antiBanTask == 3) {
             log("Examine Closest NPC.");
             NPC RandomNPC = NPCs.closest(n -> n != null && !n.getName().equals("null"));
             if (RandomNPC != null) {
@@ -303,7 +305,7 @@ public class Main  extends AbstractScript { /*START*/
             }
         } // Examine Closest NPC
 
-        if (AntiBanTask == 4) {
+        if (antiBanTask == 4) {
             log("Examine Closest Ground Item.");
             Entity RandomItem = GroundItems.closest(i -> i != null && !i.getName().equals("null"));;
             if (RandomItem != null) {
@@ -312,95 +314,95 @@ public class Main  extends AbstractScript { /*START*/
 
         } // Examine Closest Ground Item
 
-        if (AntiBanTask == 5) {
+        if (antiBanTask == 5) {
             log("Opening Random Tab.");
-            if (RandomTabToOpen == 1) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 1) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.ACCOUNT_MANAGEMENT);
                 } else {
                     Tabs.openWithFKey(Tab.ACCOUNT_MANAGEMENT);
                 }
 
             } // OPEN TAB - ACCOUNT MANAGEMENT
-            if (RandomTabToOpen == 2) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 2) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.CLAN);
                 } else {
                     Tabs.openWithFKey(Tab.CLAN);
                 }
             } // OPEN TAB - CLAN
-            if (RandomTabToOpen == 3) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 3) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.COMBAT);
                 } else {
                     Tabs.openWithFKey(Tab.COMBAT);
                 }
             } // OPEN TAB - COMBAT
-            if (RandomTabToOpen == 4) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 4) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.EMOTES);
                 } else {
                     Tabs.openWithFKey(Tab.EMOTES);
                 }
             } // OPEN TAB - EMOTES
-            if (RandomTabToOpen == 5) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 5) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.EQUIPMENT);
                 } else {
                     Tabs.openWithFKey(Tab.EQUIPMENT);
                 }
             } // OPEN TAB - EQUIPMENT
-            if (RandomTabToOpen == 6) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 6) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.FRIENDS);
                 } else {
                     Tabs.openWithFKey(Tab.FRIENDS);
                 }
             } // OPEN TAB - FRIENDS
-            if (RandomTabToOpen == 7) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 7) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.INVENTORY);
                 } else {
                     Tabs.openWithFKey(Tab.INVENTORY);
                 }
             } // OPEN TAB - INVENTORY
-            if (RandomTabToOpen == 8) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 8) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.MAGIC);
                 } else {
                     Tabs.openWithFKey(Tab.MAGIC);
                 }
             } // OPEN TAB - MAGIC
-            if (RandomTabToOpen == 9) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 9) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.MUSIC);
                 } else {
                     Tabs.openWithFKey(Tab.MUSIC);
                 }
             } // OPEN TAB - MUSIC
-            if (RandomTabToOpen == 10) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 10) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.OPTIONS);
                 } else {
                     Tabs.openWithFKey(Tab.OPTIONS);
                 }
             }// OPEN TAB - OPTIONS
-            if (RandomTabToOpen == 11) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 11) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.PRAYER);
                 } else {
                     Tabs.openWithFKey(Tab.PRAYER);
                 }
             }// OPEN TAB - PRAYER
-            if (RandomTabToOpen == 12) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 12) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.QUEST);
                 } else {
                     Tabs.openWithFKey(Tab.QUEST);
                 }
             } // OPEN TAB - QUEST
-            if (RandomTabToOpen == 13) {
-                if (MouseOrHotKey == 1) {
+            if (randomTabToOpen == 13) {
+                if (mouseOrHotKey == 1) {
                     Tabs.openWithMouse(Tab.SKILLS);
                 } else {
                     Tabs.openWithFKey(Tab.SKILLS);
@@ -408,103 +410,103 @@ public class Main  extends AbstractScript { /*START*/
             } // OPEN TAB - SKILLS
         } // Flip To A Random Tab
 
-        if (AntiBanTask == 6) {
+        if (antiBanTask == 6) {
             log("Checking Random Skill.");
-            RandomSkillToCheck = Calculations.random(1,15);
+            randomSkillToCheck = Calculations.random(1,15);
             int x = Calculations.random(0, 25);
             int y = Calculations.random(0, 15);
 
             if (!Tabs.isOpen(Tab.SKILLS)) {
                 Tabs.openWithMouse(Tab.SKILLS);
             }
-            if (RandomSkillToCheck != 0) {
+            if (randomSkillToCheck != 0) {
 
-                if (RandomSkillToCheck == 1) {
+                if (randomSkillToCheck == 1) {
                     Point p = new Point(550, 210); // Attack
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
 
                 }
-                if (RandomSkillToCheck == 2) {
+                if (randomSkillToCheck == 2) {
                     Point p = new Point(550, 240); // Strength
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 3) {
+                if (randomSkillToCheck == 3) {
                     Point p = new Point(550, 270); // Defence
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 4) {
+                if (randomSkillToCheck == 4) {
                     Point p = new Point(612, 210); // Hitpoints
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 5) {
+                if (randomSkillToCheck == 5) {
                     Point p = new Point(550, 304); // Range
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 6) {
+                if (randomSkillToCheck == 6) {
                     Point p = new Point(550, 370); // Mage
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 7) {
+                if (randomSkillToCheck == 7) {
                     Point p = new Point(550, 336); // Prayer
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 8) {
+                if (randomSkillToCheck == 8) {
                     Point p = new Point(550, 400); // Runecrafting
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 9) {
+                if (randomSkillToCheck == 9) {
                     Point p = new Point(612, 337); // Crafting
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 10) {
+                if (randomSkillToCheck == 10) {
                     Point p = new Point(675, 210); // Mining
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 11) {
+                if (randomSkillToCheck == 11) {
                     Point p = new Point(675, 240); // Smithing
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 12) {
+                if (randomSkillToCheck == 12) {
                     Point p = new Point(675, 273); // Fishing
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 13) {
+                if (randomSkillToCheck == 13) {
                     Point p = new Point(675, 304); // Cooking
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 14) {
+                if (randomSkillToCheck == 14) {
                     Point p = new Point(675, 336); // Firemaking
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
 
                 }
-                if (RandomSkillToCheck == 15) {
+                if (randomSkillToCheck == 15) {
                     Point p = new Point(675, 368); // Woodcutting
                     p.setLocation(p.getX() + x, p.getY() + y);
                     Mouse.move(p);
@@ -517,25 +519,25 @@ public class Main  extends AbstractScript { /*START*/
 
     }
 
-    NPC FortressGuard = NPCs.closest(npc -> npc.getName().equals("Fortress Guard")
+    NPC fortressGuard = NPCs.closest(npc -> npc.getName().equals("Fortress Guard")
             && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
 
-    NPC Chicken = NPCs.closest(npc -> npc.getName().equals("Chicken")
+    NPC chicken = NPCs.closest(npc -> npc.getName().equals("Chicken")
             && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
 
-    NPC Monk = NPCs.closest(npc -> npc.getName().equals("Monk")
+    NPC monk = NPCs.closest(npc -> npc.getName().equals("Monk")
             && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
 
-    NPC LesserDemon = NPCs.closest(npc -> npc.getName().equals("Lesser Demon")
+    NPC lesserDemon = NPCs.closest(npc -> npc.getName().equals("Lesser Demon")
             && !npc.isInCombat() && (npc.distance(getLocalPlayer().getTile()) < 9)) ;
 
 
     @Override
     public int onLoop() {
 
-        AntiBanTask = Calculations.random(1, 50);
-        RandomTabToOpen = Calculations.random(1, 13);
-        MouseOrHotKey = Calculations.random(1, 2);
+        antiBanTask = Calculations.random(1, 50);
+        randomTabToOpen = Calculations.random(1, 13);
+        mouseOrHotKey = Calculations.random(1, 2);
         killFortressGuards = 1;
 
 
@@ -546,7 +548,7 @@ public class Main  extends AbstractScript { /*START*/
 
             //Shortbow - Max Distance = 5 / 7 if using Longrange with Defence
 
-            case KillFortressGuardActivity:
+            case KILL_FORTRESS_GUARD_ACTIVITY:
 
 
                 if (!getLocalPlayer().isInCombat()) {
@@ -554,13 +556,13 @@ public class Main  extends AbstractScript { /*START*/
 
                     if (Equipment.contains(x -> x.getName().contains("arrow"))) {
                         if (GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.contains(getLocalPlayer())) {
-                            if ((GL0ZZ3N_AREAS.BLACK_KNIGHT_FORTRESS_ENTRANCE.contains(FortressGuard))) {
-                                FortressGuard.interact("Attack");
+                            if ((GL0ZZ3N_AREAS.BLACK_KNIGHT_FORTRESS_ENTRANCE.contains(fortressGuard))) {
+                                fortressGuard.interact("Attack");
                                 rangeXpHr = (int) (rangeXpGained / ((System.currentTimeMillis() - timeBegan) / 3600000.0D));
                                 log("uwu! Attacking Fortress Guard!");
                                 return (Calculations.random(750, 900));
                             } else {
-                                AntiBan();
+                                antiBan();
                             }
                         } else {
                             Check_Run();
@@ -594,20 +596,20 @@ public class Main  extends AbstractScript { /*START*/
                 
                 break;
 
-            case KillChickenActivity:
+            case KILL_CHICKEN_ACTIVITY:
 
                 if (!getLocalPlayer().isInCombat()) {
 
 
                     if (Equipment.contains(x -> x.getName().contains("arrow"))) {
                         if (GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.contains(getLocalPlayer())) {
-                            if ((GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.contains(Chicken))) {
-                                Chicken.interact("Attack");
+                            if ((GL0ZZ3N_AREAS.FALADOR_FARM_CHICKENS.contains(chicken))) {
+                                chicken.interact("Attack");
                                 rangeXpHr = (int) (rangeXpGained / ((System.currentTimeMillis() - timeBegan) / 3600000.0D));
                                 log("uwu! Attacking Chicken!");
                                 return (Calculations.random(750, 900));
                             } else {
-                                AntiBan();
+                                antiBan();
                             }
                         } else {
                             Check_Run();
@@ -639,20 +641,20 @@ public class Main  extends AbstractScript { /*START*/
 
                 }
                 break;
-            case KillMonkActivity:
+            case KILL_MONK_ACTIVITY:
 
                 if (!getLocalPlayer().isInCombat()) {
 
 
                     if (Equipment.contains(x -> x.getName().contains("arrow"))) {
                         if (GL0ZZ3N_AREAS.MONASTERY.contains(getLocalPlayer())) {
-                            if ((GL0ZZ3N_AREAS.MONASTERY.contains(Monk))) {
-                                Monk.interact("Attack");
+                            if ((GL0ZZ3N_AREAS.MONASTERY.contains(monk))) {
+                                monk.interact("Attack");
                                 rangeXpHr = (int) (rangeXpGained / ((System.currentTimeMillis() - timeBegan) / 3600000.0D));
                                 log("uwu! Attacking Monk!");
                                 return (Calculations.random(750, 900));
                             } else {
-                                AntiBan();
+                                antiBan();
                             }
                         } else {
                             Check_Run();
@@ -684,20 +686,20 @@ public class Main  extends AbstractScript { /*START*/
 
                 }
                 break;
-            case KillLesserDemonActivity:
+            case KILL_LESSER_DEMON_ACTIVITY:
 
                 if (!getLocalPlayer().isInCombat()) {
 
 
                     if (Equipment.contains(x -> x.getName().contains("arrow"))) {
                         if (GL0ZZ3N_AREAS.ICE_MOUNTAIN_SAFE_SPOT.contains(getLocalPlayer())) {
-                            if ((GL0ZZ3N_AREAS.BLACK_KNIGHT_FORTRESS_ENTRANCE.contains(FortressGuard))) {
-                                FortressGuard.interact("Attack");
+                            if ((GL0ZZ3N_AREAS.BLACK_KNIGHT_FORTRESS_ENTRANCE.contains(fortressGuard))) {
+                                fortressGuard.interact("Attack");
                                 rangeXpHr = (int) (rangeXpGained / ((System.currentTimeMillis() - timeBegan) / 3600000.0D));
                                 log("uwu! Attacking Fortress Guard!");
                                 return (Calculations.random(750, 900));
                             } else {
-                                AntiBan();
+                                antiBan();
                             }
                         } else {
                             Check_Run();
